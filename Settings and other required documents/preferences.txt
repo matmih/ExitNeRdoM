@@ -1,0 +1,2 @@
+JSImp PValImp AttDivImp ElemDivImp ECoverage NetImportance
+0.2 0.15 0.15 0.15 0.15 0.2
