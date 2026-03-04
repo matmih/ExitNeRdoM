@@ -1,0 +1,39 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron10 >= 1.0548678636550903 <= 3.2875266075134277 AND trainedwdbcmlps111neuron4 >= 3.9747707843780518 <= 14.346355438232422 AND trainedwdbcmlps111neuron19 >= 0.0 <= 0.0 AND trainedwdbcmlps111neuron17 >= 2.596235513687134 <= 8.692855834960938 
+W2R: trainedwdbcmlps112neuron22 >= 0.0 <= 0.0 AND trainedwdbcmlps112neuron20 >= 15.099985122680664 <= 45.732582092285156 AND trainedwdbcmlps112neuron18 >= 0.0 <= 0.0 OR ( trainedwdbcmlps112neuron8 >= 0.39618581533432007 <= 3.3107106685638428 AND trainedwdbcmlps112neuron26 >= 0.0 <= 0.28920450806617737 AND trainedwdbcmlps112neuron1 >= 0.0 <= 1.1564570665359497 AND trainedwdbcmlps112neuron20 >= 15.099985122680664 <= 45.732582092285156  )
+JS: 1.0
+p-value :1.1792788967568413E-12
+Support intersection: 14
+Support union: 14
+
+Covered examples (intersection): 
+'162' '157' '127' '110' '107' '87' '86' '84' '71' '65' '59' '42' '21' '19' 
+Union elements: 
+'162' '157' '127' '110' '107' '87' '86' '84' '71' '65' '59' '42' '21' '19' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron18 >= 9.441812515258789 <= 26.365936279296875 AND trainedwdbcmlps111neuron10 >= 1.0548678636550903 <= 3.2875266075134277 
+W2R: trainedwdbcmlps112neuron22 >= 0.0 <= 0.0 AND trainedwdbcmlps112neuron20 >= 15.099985122680664 <= 45.732582092285156 AND trainedwdbcmlps112neuron18 >= 0.0 <= 0.0 OR ( trainedwdbcmlps112neuron8 >= 0.39618581533432007 <= 3.3107106685638428 AND trainedwdbcmlps112neuron26 >= 0.0 <= 0.9395610690116882 AND trainedwdbcmlps112neuron20 >= 15.099985122680664 <= 45.732582092285156  )
+JS: 0.9375
+p-value :1.5831780331154732E-12
+Support intersection: 15
+Support union: 16
+
+Covered examples (intersection): 
+'162' '157' '127' '110' '107' '87' '86' '85' '84' '71' '65' '59' '42' '21' '19' 
+Union elements: 
+'162' '157' '127' '110' '107' '87' '86' '85' '84' '79' '71' '65' '59' '42' '21' '19' 
+
+Number of tests: 0
+Found: 2 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,5 minutes, 35 seconds.

@@ -1,0 +1,39 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron20 >= 12.327648162841797 <= 21.958118438720703 AND trainedwdbcmlps111neuron10 >= 0.0 <= 0.0 AND trainedwdbcmlps111neuron8 >= 5.604089260101318 <= 11.48597240447998 AND trainedwdbcmlps111neuron2 >= 2.5835094451904297 <= 6.6801629066467285 AND trainedwdbcmlps111neuron24 >= 0.0 <= 0.30502620339393616 OR ( trainedwdbcmlps111neuron20 >= 15.592516899108887 <= 22.7171688079834 AND trainedwdbcmlps111neuron8 >= 5.456679821014404 <= 17.60515594482422 AND trainedwdbcmlps111neuron2 >= 2.6252732276916504 <= 6.885929584503174  )
+W2R: trainedwdbcmlps112neuron21 >= 0.0 <= 0.1729029268026352 AND trainedwdbcmlps112neuron6 >= 14.493401527404785 <= 25.22219467163086 AND trainedwdbcmlps112neuron5 >= 2.2610890865325928 <= 4.574951171875 AND trainedwdbcmlps112neuron12 >= 0.0 <= 6.14885950088501 
+JS: 0.8636363636363636
+p-value :1.0373923942097463E-12
+Support intersection: 19
+Support union: 22
+
+Covered examples (intersection): 
+'161' '159' '138' '128' '105' '102' '92' '90' '78' '75' '61' '56' '52' '39' '36' '31' '27' '18' '2' 
+Union elements: 
+'161' '159' '153' '138' '129' '128' '105' '102' '92' '90' '78' '75' '61' '56' '52' '50' '39' '36' '31' '27' '18' '2' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron8 >= 5.3639349937438965 <= 17.60515594482422 AND trainedwdbcmlps111neuron2 >= 0.13531571626663208 <= 6.885929584503174 
+W2R: trainedwdbcmlps112neuron12 >= 0.0 <= 6.14885950088501 AND trainedwdbcmlps112neuron6 >= 14.493401527404785 <= 25.22219467163086 AND trainedwdbcmlps112neuron5 >= 2.2610890865325928 <= 4.574951171875 AND trainedwdbcmlps112neuron21 >= 0.0 <= 0.1729029268026352 
+JS: 0.6451612903225806
+p-value :1.430852103467828E-10
+Support intersection: 20
+Support union: 31
+
+Covered examples (intersection): 
+'161' '159' '138' '128' '105' '102' '92' '90' '78' '75' '61' '56' '52' '50' '39' '36' '31' '27' '18' '2' 
+Union elements: 
+'169' '161' '159' '155' '153' '138' '129' '128' '123' '116' '105' '102' '96' '95' '92' '90' '78' '75' '61' '58' '56' '52' '50' '46' '39' '36' '31' '27' '18' '3' '2' 
+
+Number of tests: 0
+Found: 2 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,4 minutes, 26 seconds.
