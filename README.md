@@ -37,4 +37,17 @@ The studied layers contain 32 neurons each.
 * Execution times (using 14 threads):
   * Time take to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281,78 x mlp train time)      
   * Time take to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27,13 x mlp train time)
-  * Time take to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)     
+  * Time take to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
+ 
+## Execution times considerations
+* ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 will linearly speed up the computation
+* ExitNeRdoM creates and writes in multiple output files (128 in this example, __2*TotalnumNeurons__ in general)
+* Neural networks are trained on CPU and GPU, where GPUs can run thousands of threads in parallel.
+* ExitNeRdoM analyses of toy example networks was performed on the MLP activations obtained on the train set. As it was shown in the referenced manuscript, the methodology can be executed on much smaller data subset without significant loss of accuracy. The manuscript presents results obtained on the test set (normally 20%-30% the size of the whole dataset). Thus, one could expect >3x reduction in execution times on such inputs. 
+
+## Results considerations
+* MLP training provides a number of deep learning models (two predictive MLP models in the toy example). These can be considered as black boxes performing predefined tasks. 
+* ExitNeRdoM output provides understandable redescriptions describing neurons of selected layers (penultimate in the toy example) of input networks on the individual and interaction level (it unpacks the boxes and obtains potentially large number of information)
+* The amount of information ExitNeRdoM obtains depends on the input models and on the algorithmic parameters.
+* Algoritmic parameters can cause variations in execution times, since the level of detail about the boxes can be very high (very detailed analyses) or very low but accurate.
+* In addition to obtaining local predictors, understanding neuron and groups of neuron functions, the methdology allows utilising additional sources of information to perform scientific analyses.  
