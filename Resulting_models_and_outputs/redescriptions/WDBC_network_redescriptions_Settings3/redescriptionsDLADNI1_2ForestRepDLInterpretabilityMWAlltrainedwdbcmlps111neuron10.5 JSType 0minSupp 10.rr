@@ -1,0 +1,165 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) 
+W2R: trainedwdbcmlps112neuron30 >= 2.824317455291748 <= 10.170090675354004 
+JS: 0.5909090909090909
+p-value :3.856473584917808E-9
+Support intersection: 13
+Support union: 22
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '86' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'152' '148' '141' '124' '119' '113' '101' '100' '94' '93' '86' '71' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) 
+W2R: trainedwdbcmlps112neuron30 >= 3.0545825958251953 <= 10.170090675354004 AND trainedwdbcmlps112neuron25 >= 14.756424903869629 <= 44.81699752807617 
+JS: 0.625
+p-value :5.324768181935724E-9
+Support intersection: 10
+Support union: 16
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '66' '53' '48' '23' '22' '15' 
+Union elements: 
+'141' '124' '113' '100' '93' '86' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) OR ( trainedwdbcmlps111neuron26 >= 8.386689186096191 <= 38.21665573120117  )
+W2R: trainedwdbcmlps112neuron20 >= 54.19055938720703 <= 202.37200927734375 
+JS: 0.7727272727272727
+p-value :1.261923898709938E-11
+Support intersection: 17
+Support union: 22
+
+Covered examples (intersection): 
+'158' '152' '141' '132' '124' '113' '101' '100' '93' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'158' '152' '141' '132' '124' '113' '101' '100' '94' '93' '86' '77' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) OR ( trainedwdbcmlps111neuron26 >= 8.386689186096191 <= 38.21665573120117  )
+W2R: trainedwdbcmlps112neuron3 >= 23.911954879760742 <= 78.64772033691406 
+JS: 0.6956521739130435
+p-value :1.1466272376026154E-10
+Support intersection: 16
+Support union: 23
+
+Covered examples (intersection): 
+'158' '152' '141' '132' '124' '113' '101' '100' '93' '66' '53' '48' '32' '23' '22' '15' 
+Union elements: 
+'158' '152' '141' '132' '124' '113' '101' '100' '94' '93' '86' '77' '66' '53' '48' '40' '32' '24' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) 
+W2R: trainedwdbcmlps112neuron30 >= 2.824317455291748 <= 8.902392387390137 AND trainedwdbcmlps112neuron4 >= 0.0 <= 1.130654215812683 
+JS: 0.631578947368421
+p-value :2.4725311797979543E-9
+Support intersection: 12
+Support union: 19
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '86' '66' '53' '48' '32' '23' '22' '8' 
+Union elements: 
+'152' '141' '124' '113' '101' '100' '93' '86' '71' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron1 >= 0.28927457332611084 <= 1.7710230350494385 AND trainedwdbcmlps111neuron26 >= 8.386689186096191 <= 22.52440071105957 
+W2R: trainedwdbcmlps112neuron20 >= 54.19055938720703 <= 106.85226440429688 AND trainedwdbcmlps112neuron13 >= 0.0 <= 4.255270004272461 
+JS: 0.8571428571428571
+p-value :3.4390934544603624E-11
+Support intersection: 12
+Support union: 14
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'152' '141' '124' '101' '100' '93' '66' '53' '48' '32' '23' '22' '15' '8' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 13.602665901184082 <= 26.328126907348633 AND trainedwdbcmlps111neuron1 >= 0.28927457332611084 <= 1.7710230350494385 
+W2R: trainedwdbcmlps112neuron13 >= 0.0 <= 4.255270004272461 AND trainedwdbcmlps112neuron25 >= 14.756424903869629 <= 26.237581253051758 
+JS: 1.0
+p-value :2.9885982577582126E-11
+Support intersection: 10
+Support union: 10
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '66' '53' '48' '23' '22' '15' 
+Union elements: 
+'141' '124' '100' '93' '66' '53' '48' '23' '22' '15' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron21 >= 0.0 <= 0.8257632255554199 AND trainedwdbcmlps111neuron26 >= 0.0 <= 8.16002082824707 AND trainedwdbcmlps111neuron1 >= 0.0 <= 0.05905766040086746  ) 
+W2R: trainedwdbcmlps112neuron30 >= 2.824317455291748 <= 10.170090675354004 
+JS: 0.6666666666666666
+p-value :7.936451495993424E-11
+Support intersection: 20
+Support union: 30
+
+Covered examples (intersection): 
+'152' '148' '141' '124' '119' '113' '101' '100' '94' '93' '86' '71' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'170' '158' '155' '152' '148' '141' '132' '124' '119' '113' '108' '101' '100' '94' '93' '86' '77' '73' '71' '66' '53' '48' '40' '32' '23' '22' '21' '19' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron21 >= 0.0 <= 0.8257632255554199 AND trainedwdbcmlps111neuron26 >= 0.0 <= 8.16002082824707 AND trainedwdbcmlps111neuron1 >= 0.0 <= 0.05905766040086746  ) 
+W2R: trainedwdbcmlps112neuron20 >= 54.19055938720703 <= 202.37200927734375 
+JS: 0.5666666666666667
+p-value :1.7006814845288432E-9
+Support intersection: 17
+Support union: 30
+
+Covered examples (intersection): 
+'158' '152' '141' '132' '124' '113' '101' '100' '93' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'170' '158' '155' '152' '148' '141' '132' '124' '119' '113' '108' '101' '100' '94' '93' '86' '77' '73' '71' '66' '53' '48' '40' '32' '23' '22' '21' '19' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron21 >= 0.0 <= 0.8257632255554199 AND trainedwdbcmlps111neuron26 >= 0.0 <= 8.16002082824707 AND trainedwdbcmlps111neuron1 >= 0.0 <= 0.05905766040086746  ) 
+W2R: trainedwdbcmlps112neuron3 >= 23.911954879760742 <= 78.64772033691406 
+JS: 0.5161290322580645
+p-value :1.1312842107535914E-8
+Support intersection: 16
+Support union: 31
+
+Covered examples (intersection): 
+'158' '152' '141' '132' '124' '113' '101' '100' '93' '66' '53' '48' '32' '23' '22' '15' 
+Union elements: 
+'170' '158' '155' '152' '148' '141' '132' '124' '119' '113' '108' '101' '100' '94' '93' '86' '77' '73' '71' '66' '53' '48' '40' '32' '24' '23' '22' '21' '19' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron21 >= 0.0 <= 0.8257632255554199 AND trainedwdbcmlps111neuron26 >= 0.0 <= 8.16002082824707 AND trainedwdbcmlps111neuron1 >= 0.0 <= 0.05905766040086746  ) 
+W2R: trainedwdbcmlps112neuron30 >= 2.824317455291748 <= 8.902392387390137 AND trainedwdbcmlps112neuron4 >= 0.0 <= 1.130654215812683 
+JS: 0.5333333333333333
+p-value :4.690903221415965E-9
+Support intersection: 16
+Support union: 30
+
+Covered examples (intersection): 
+'152' '141' '124' '113' '101' '100' '93' '86' '71' '66' '53' '48' '32' '23' '22' '8' 
+Union elements: 
+'170' '158' '155' '152' '148' '141' '132' '124' '119' '113' '108' '101' '100' '94' '93' '86' '77' '73' '71' '66' '53' '48' '40' '32' '23' '22' '21' '19' '15' '8' 
+
+Number of tests: 0
+Found: 11 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,0 minutes, 10 seconds.

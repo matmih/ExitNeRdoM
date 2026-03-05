@@ -1,0 +1,39 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) 
+W2R: trainedwdbcmlps112neuron30 >= 2.824317455291748 <= 10.170090675354004 
+JS: 0.5909090909090909
+p-value :0.0
+Support intersection: 13
+Support union: 22
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '86' '66' '53' '48' '32' '23' '22' '15' '8' 
+Union elements: 
+'152' '148' '141' '124' '119' '113' '101' '100' '94' '93' '86' '71' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron1 >= 0.0 <= 0.25103914737701416  ) 
+W2R: trainedwdbcmlps112neuron30 >= 3.0545825958251953 <= 10.170090675354004 AND trainedwdbcmlps112neuron25 >= 14.756424903869629 <= 44.81699752807617 
+JS: 0.625
+p-value :0.0
+Support intersection: 10
+Support union: 16
+
+Covered examples (intersection): 
+'141' '124' '100' '93' '66' '53' '48' '23' '22' '15' 
+Union elements: 
+'141' '124' '113' '100' '93' '86' '66' '53' '48' '40' '32' '23' '22' '21' '15' '8' 
+
+Number of tests: 0
+Found: 2 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,0 minutes, 7 seconds.
