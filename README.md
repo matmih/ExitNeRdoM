@@ -28,6 +28,7 @@ The studied layers contain 32 neurons each.
 * MLPs were trained using:
    *__CPU__: AMD Ryzen 9 5900X 12-Core Processor (12 cores, 24 threads)
    *__GPU__: RTX 3080 (8704 cores)
+   * Maximally 20 epochs of training can be performed before overfitting occurs. 
 * Execution times:
    * Time taken to train __mlp-s-111__ (test_acc = 0.953): 1.50 seconds
    * Time taken to train __mlp-s-112__ (test_acc = 0.953): 1.08 seconds
@@ -35,8 +36,8 @@ The studied layers contain 32 neurons each.
 * ExitNeRdoM output was computed using:
   *__CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
 * Execution times (using 14 threads):
-  * Time take to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281,78 x mlp train time)      
-  * Time take to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27,13 x mlp train time)
+  * Time take to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time)      
+  * Time take to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time)
   * Time take to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
  
 ## Execution times considerations
