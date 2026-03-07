@@ -32,7 +32,7 @@ The studied layers contain 32 neurons each.
 * Execution times:
    * Time taken to train __mlp-s-111__ (test_acc = 0.953): 1.50 seconds
    * Time taken to train __mlp-s-112__ (test_acc = 0.953): 1.08 seconds
-   * Toy example networks are small, thus a subset of computational resources was used during training.
+   * Toy example networks are small, thus a subset of computational resources were used during training.
 * ExitNeRdoM output was computed using:
   *__CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
 * Execution times (using 14 threads):
