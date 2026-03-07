@@ -36,15 +36,17 @@ The studied layers contain 32 neurons each.
 * ExitNeRdoM output was computed using:
   *__CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
 * Execution times (using 14 threads):
-  * Time take to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time)      
-  * Time take to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time)
-  * Time take to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
+  * Time taken to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time)      
+  * Time taken to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time)
+  * Time taken to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
+  * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 31 seconds (12.02 x mlps train time)
  
 ## Execution times considerations
 * The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 will linearly speed up the computation
 * The ExitNeRdoM creates and writes in multiple output files (128 in this example, __2*TotalnumNeurons__ in general)
 * Neural networks are trained on CPU and GPU, where GPUs can run thousands of threads in parallel.
-* The ExitNeRdoM was run on the MLPs activations obtained on the test set (around 30% of data samples). Using smaller test sets (15%-20%) would further increase the execution speed of this methodology.  
+* The ExitNeRdoM was run on the MLPs activations obtained on the test set (around 30% of data samples, Settings1-Settings3).
+* Settings4 uses activations obtained on smaller test set (20% of data samples) which further increases the execution speed of this methodology.  
 
 ## Results considerations
 * MLP training provides a number of deep learning models (two predictive MLP models in the toy example). These can be considered as black boxes performing predefined tasks. 
