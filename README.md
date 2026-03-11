@@ -32,7 +32,7 @@ The studied layers contain 32 neurons each.
 * Execution times:
    * Time taken to train __mlp-s-111__ (test_acc = 0.953): 1.50 seconds
    * Time taken to train __mlp-s-112__ (test_acc = 0.953): 1.08 seconds
-   * Toy example networks are small, thus a subset of computational resources was used during training.
+   * Toy example networks are small, thus a subset of computational resources were used during training.
 * ExitNeRdoM output was computed using:
   *__CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
 * Execution times (using 14 threads):
@@ -40,6 +40,8 @@ The studied layers contain 32 neurons each.
   * Time taken to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time)
   * Time taken to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
   * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 31 seconds (12.02 x mlps train time)
+* Execution times (using 16 threads):
+  * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time)
  
 ## Execution times considerations
 * The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 will linearly speed up the computation
