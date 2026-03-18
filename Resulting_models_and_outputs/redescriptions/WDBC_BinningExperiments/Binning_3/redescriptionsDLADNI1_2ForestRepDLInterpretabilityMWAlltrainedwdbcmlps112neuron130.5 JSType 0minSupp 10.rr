@@ -1,0 +1,25 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 8.122802734375 <= 31.199478149414062 AND trainedwdbcmlps111neuron26 >= 5.243805408477783 <= 18.791711807250977 
+W2R: NOT ( trainedwdbcmlps112neuron13 >= 0.0 <= 0.12350737303495407  ) 
+JS: 0.8095238095238095
+p-value :2.553014910589013E-9
+Support intersection: 17
+Support union: 21
+
+Covered examples (intersection): 
+'162' '158' '152' '132' '101' '100' '87' '77' '71' '48' '42' '40' '32' '24' '22' '10' '9' 
+Union elements: 
+'162' '158' '152' '132' '107' '104' '101' '100' '87' '84' '77' '71' '48' '42' '40' '32' '26' '24' '22' '10' '9' 
+
+Number of tests: 0
+Found: 1 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,0 minutes, 13 seconds.

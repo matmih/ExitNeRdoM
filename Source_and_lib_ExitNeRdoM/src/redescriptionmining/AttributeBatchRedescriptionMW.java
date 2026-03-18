@@ -284,8 +284,14 @@ public class AttributeBatchRedescriptionMW implements Runnable{
          if(appset.initClusteringFileName.equals(""))//zamijeniti sa initialClusteringGenAttribute
             if(clustMode == 1)
              bins = datJInit.initialClusteringGenAttribute2BinsMT(appset.outFolderPath,appset,datJ.schema.getNbDescriptiveAttributes(), at+1, threadID, r, fid);
-        else   
+        else if(clustMode == 0)  
             bins = datJInit.initialClusteringGenAttributeMT(appset.outFolderPath,appset,datJ.schema.getNbDescriptiveAttributes(), at+1, threadID, r, fid);
+        else if(clustMode == 2){//equal frequency binning
+           bins = datJInit.initialClusteringGenAttributeEqFreqMT(appset.outFolderPath,appset,datJ.schema.getNbDescriptiveAttributes(), at+1, threadID, r, fid); 
+        }
+        else if(clustMode == 3){//quantile binning
+        bins = datJInit.initialClusteringGenAttributeKMeansMT(appset.outFolderPath,appset,datJ.schema.getNbDescriptiveAttributes(), at+1, threadID, r, fid);       
+        }
             //datJInit.initialClusteringGen1(appset.outFolderPath,appset,datJ.schema.getNbDescriptiveAttributes(),r);
        
         double min = Double.MAX_VALUE;
@@ -1863,9 +1869,13 @@ public class AttributeBatchRedescriptionMW implements Runnable{
       del.delete();
       del.setPath(appset.outFolderPath+"\\view1tmpF"+threadID+".out");
       del.delete();
+      del.setPath(appset.outFolderPath+"\\view1tmpF"+threadID+".s");
+      del.delete();
       del.setPath(appset.outFolderPath+"\\view1tmpF"+threadID+".model");
       del.delete();
       del.setPath(appset.outFolderPath+"\\view2tmpF"+threadID+".out");
+      del.delete();
+      del.setPath(appset.outFolderPath+"\\view2tmpF"+threadID+".s");
       del.delete();
       del.setPath(appset.outFolderPath+"\\view2tmpF"+threadID+".model");
       del.delete();

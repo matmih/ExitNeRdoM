@@ -1,0 +1,67 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 10.489544868469238 <= 31.199478149414062 
+W2R: NOT ( trainedwdbcmlps112neuron13 >= 0.0 <= 1.2521440982818604  ) OR ( trainedwdbcmlps112neuron3 >= 20.405317306518555 <= 41.978424072265625  )
+JS: 0.8823529411764706
+p-value :1.0081137036266341E-9
+Support intersection: 15
+Support union: 17
+
+Covered examples (intersection): 
+'162' '158' '152' '132' '101' '100' '87' '77' '48' '42' '32' '24' '22' '10' '9' 
+Union elements: 
+'162' '158' '152' '132' '104' '101' '100' '87' '77' '48' '42' '40' '32' '24' '22' '10' '9' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 10.489544868469238 <= 31.199478149414062 
+W2R: NOT ( trainedwdbcmlps112neuron13 >= 0.0 <= 1.660589575767517 AND trainedwdbcmlps112neuron3 >= 0.0 <= 19.968347549438477  ) 
+JS: 1.0
+p-value :1.687597839250543E-10
+Support intersection: 15
+Support union: 15
+
+Covered examples (intersection): 
+'162' '158' '152' '132' '101' '100' '87' '77' '48' '42' '32' '24' '22' '10' '9' 
+Union elements: 
+'162' '158' '152' '132' '101' '100' '87' '77' '48' '42' '32' '24' '22' '10' '9' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 10.969306945800781 <= 31.199478149414062 AND trainedwdbcmlps111neuron24 >= 0.0 <= 0.11276499181985855 
+W2R: NOT ( trainedwdbcmlps112neuron13 >= 0.0 <= 1.2521440982818604  ) OR ( trainedwdbcmlps112neuron3 >= 20.405317306518555 <= 41.978424072265625  )
+JS: 0.7647058823529411
+p-value :1.0740201838999042E-8
+Support intersection: 13
+Support union: 17
+
+Covered examples (intersection): 
+'162' '158' '152' '132' '100' '77' '48' '42' '32' '24' '22' '10' '9' 
+Union elements: 
+'162' '158' '152' '132' '104' '101' '100' '87' '77' '48' '42' '40' '32' '24' '22' '10' '9' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron4 >= 10.969306945800781 <= 31.199478149414062 AND trainedwdbcmlps111neuron24 >= 0.0 <= 0.11276499181985855 OR ( trainedwdbcmlps111neuron4 >= 10.489544868469238 <= 31.199478149414062  )
+W2R: NOT ( trainedwdbcmlps112neuron13 >= 0.0 <= 1.660589575767517 AND trainedwdbcmlps112neuron3 >= 0.0 <= 19.968347549438477  ) 
+JS: 1.0
+p-value :1.687597839250543E-10
+Support intersection: 15
+Support union: 15
+
+Covered examples (intersection): 
+'162' '158' '152' '132' '101' '100' '87' '77' '48' '42' '32' '24' '22' '10' '9' 
+Union elements: 
+'162' '158' '152' '132' '101' '100' '87' '77' '48' '42' '32' '24' '22' '10' '9' 
+
+Number of tests: 0
+Found: 4 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,0 minutes, 14 seconds.

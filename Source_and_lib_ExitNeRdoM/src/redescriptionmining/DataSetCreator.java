@@ -16,6 +16,8 @@ import clus.data.type.NominalAttrType;
 import clus.data.type.NumericAttrType;
 import clus.main.Settings;
 import clus.util.ClusException;
+import gnu.trove.iterator.TIntIterator;
+import gnu.trove.set.hash.TIntHashSet;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -27,6 +29,11 @@ import java.util.HashSet;
 import java.util.Random;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.javatuples.Pair;
+import weka.clusterers.SimpleKMeans;
+import weka.core.Attribute;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
 
 /**
  *
@@ -1785,7 +1792,509 @@ public class DataSetCreator {
                  }  
         return bins;
     }
+     
+     
+  HashMap<Integer,Pair<Double,Double>> initialClusteringGenAttributeEqFreqMT(String outFolder, ApplicationSettings appset, int numChangedAttrs, int attributeIndex, int tid, Random r, Mappings map){
+           
+         HashMap<Integer,Pair<Double,Double>> bins = new HashMap<>();
+
+          ArrayList<DataTuple> dataList=data.toArrayList();
+          ArrayList<String> values = new ArrayList<>();
+          //create histogram using attribute values
+          //add different values to the nominal type of the target attribute
+          //replace existing attr type with a new one
+          //add corresponding int values to the dataTuples/instances
+         
+         double epsilon = 0.0000001; 
+          
+         ClusAttrType selectedTargetAttr = schema.getAttrType(attributeIndex);
+         String[] categories=null;
+         
+          if(selectedTargetAttr.getTypeName().contains("Numeric")){
+                //create histogram
+              HashSet<Double> attrV = new HashSet<>();
+                    ArrayList<Double> attrValues = null;//new ArrayList<>();
+                    
+                    int arind = schema.getAttrType(attributeIndex).getArrayIndex();
+                    
+                    for(int s = 0; s<dataList.size();s++){
+                        int ind = s;
+                        
+                        if(dataList.get(ind).m_Doubles[arind]!=Double.POSITIVE_INFINITY)
+                             attrV.add(dataList.get(ind).m_Doubles[arind]);
+                        else  continue;
+                    }
+                        //attrValues.add(data1.get(rand.nextInt(data1.numInstances())).value(r));
+                      
+                      attrValues = new ArrayList(attrV);
+                      Collections.sort(attrValues);
+                      double vp[] = new double[attrValues.size()];
+                      
+                      System.out.println("vp: ");
+                      for(int s=0;s<attrValues.size();s++){
+                          System.out.print(attrValues.get(s)+" ");
+                          vp[s] = attrValues.get(s);
+                      }
+                      System.out.println();
+                      
+                      
+                      int m = (int)Math.ceil(2*Math.pow(attrValues.size(), 1/3.0));
+                      int numInBin = attrValues.size()/m;
+                      
+                      ArrayList<Double> splittingPoints = new ArrayList<>();
+                      System.out.println("Attr val: "+attrValues.size()+" "+"Num in bins: "+numInBin);
+                      int count = 0;
+                      for(int s=0;s<attrValues.size();s++){
+                            count++;   
+                            
+                             if(numInBin == 0){
+                                 splittingPoints.add(attrValues.get(s));
+                                 bins.put(s, new Pair<>(attrValues.get(0),attrValues.get(0)+epsilon));
+                                 break;
+                             }
+                            
+                              if(count == numInBin){
+                                  splittingPoints.add(attrValues.get(s));
+                                  count = 0;
+                              }
+                      }
+                      
+                      if(numInBin>=1){
+                          System.out.println("attrValues: "+attrValues.size()+" "+"splittingPoints"+" "+splittingPoints.size());
+                       for(int s=0;s<splittingPoints.size()+1;s++){
+
+                        values.add("c"+s);
+                        if(s == 0)
+                         bins.put(s, new Pair<>(Double.NEGATIVE_INFINITY,splittingPoints.get(s)));
+                        else if(s<splittingPoints.size())
+                            bins.put(s, new Pair<>(splittingPoints.get(s-1),splittingPoints.get(s)));
+                        else 
+                            bins.put(s, new Pair<>(splittingPoints.get(s-1), Double.POSITIVE_INFINITY));
+                       }
+                       System.out.println();
+                      }
+                      else{
+                          for(int s = 0; s<attrValues.size();s++)
+                              values.add("c"+s);
+                      }
+                  System.out.println("Splitting point size: "+splittingPoints.size());
+                  int numAssigned = 0;
+                  HashMap<Integer,Integer> classCounts = new HashMap<>();
+                  
+                  int targetIndex = schema.getAttrType(schema.getNbAttributes()-1).getArrayIndex();
+                  
+                  Random rand = new Random();
+                  
+                    for(int s=0;s<dataList.size();s++){
+                        
+                        
+                        if(dataList.get(s).m_Doubles[arind]<=splittingPoints.get(0)){
+                             dataList.get(s).m_Ints[targetIndex] = 0;
+                             numAssigned++;
+                             if(!classCounts.containsKey(0))
+                                 classCounts.put(0, 1);
+                             else classCounts.put(0,classCounts.get(0)+1);
+                        }
+                        else if(dataList.get(s).m_Doubles[arind]>splittingPoints.get(splittingPoints.size()-1)){
+                           // data1.get(s).setClassValue(values.get(values.size()-1));
+                            dataList.get(s).m_Ints[targetIndex] = values.size()-1;
+                            numAssigned++;
+                            
+                            if(!classCounts.containsKey(values.size()-1))
+                                 classCounts.put(values.size()-1, 1);
+                             else classCounts.put(values.size()-1,classCounts.get(values.size()-1)+1);
+                            
+                        }
+                        else{
+                            int a = 0;
+                            for(int s1 = 1;s1<splittingPoints.size();s1++)
+                                if(dataList.get(s).m_Doubles[arind]<=splittingPoints.get(s1)){
+                                     // data1.get(s).setClassValue(values.get(s1));
+                                      dataList.get(s).m_Ints[targetIndex] = s1;
+                                         numAssigned++;
+                                         a = 1;
+                                         if(!classCounts.containsKey(s1))
+                                                  classCounts.put(s1, 1);
+                                          else classCounts.put(s1,classCounts.get(s1)+1);
+                                         break;
+                                }
+                            if(a == 0){
+                                
+                            // dataList.get(s).setClassValue(values.get(rand.nextInt(values.size())));
+                             dataList.get(s).m_Ints[targetIndex] = rand.nextInt(values.size());
+                            }
+                        }
+
+                    }
+
+                     System.out.println("Num assigned: "+numAssigned); 
+                     
+                     System.out.println("Class assignement: ");
+                     for(int c:classCounts.keySet())
+                         System.out.println(c+" "+classCounts.get(c));
+                      
+     
+                categories = new String[values.size()];
+               
+               for(int i=0;i<categories.length;i++)
+                   categories[i] =values.get(i);             
+            }
+            else{
+               categories = new String[map.cattAtt.get(attributeIndex-1).getValue0().keySet().size()];
+               
+               for(int i=0;i<categories.length;i++){
+                   categories[i] = map.cattAtt.get(attributeIndex-1).getValue1().get(i);
+                   bins.put(i, new Pair<>((double)i,Double.NEGATIVE_INFINITY));
+               }
+               
+            }
+
+          ClusAttrType newtype = new NominalAttrType("target",categories);
+          
+          int lastNominal=schema.getNominalAttrUse(ClusAttrType.ATTR_USE_ALL).length; 
+          schema.setAttrType(newtype, schema.getNbAttributes()-1);
+         schema.getAttrType(schema.getNbAttributes()-1).setArrayIndex(lastNominal);
+
+          for(int i=0;i<dataList.size();i++){
+              
+              if(selectedTargetAttr.getTypeName().contains("Numeric")){
+                  
+              }
+              else{
+                String val="";
+
+               int nIndex=schema.getAttrType(attributeIndex).getArrayIndex();
+
+        //System.out.println("nIndex: "+nIndex);
+        NominalAttrType[] nom = schema.getNominalAttrUse(ClusAttrType.ATTR_USE_ALL);
+       // System.out.println("Indeks kategorije za instancu: "+i+" je: "+dataList.get(i).m_Ints[nIndex]);
+       // System.out.println("All indices for instance: "+i);
+       // for(int kk=0;kk<dataList.get(i).m_Ints.length;kk++)
+     //       System.out.print(dataList.get(i).m_Ints[kk]+" ");
+      //  System.out.println();
+      //  System.out.println("Broj nominalnih vrijednosti: "+nom[nIndex].m_Values.length);
+     //   System.out.println("Svi nominalni indeksi: ");
+     //   for(int kk=0;kk<nom[nIndex].m_Values.length;kk++)
+       //     System.out.print(nom[nIndex].m_Values[kk]+" ");
+      //  System.out.println();
+        if(dataList.get(i).m_Ints[nIndex]>=nom[nIndex].m_Values.length)
+           val =  "?";
+         val=nom[nIndex].m_Values[dataList.get(i).m_Ints[nIndex]];  
+      //   System.out.println("val: "+val);
+         if(val.equals("?"))
+             dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1] = 0;
+         else
+            dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1] = map.cattAtt.get(attributeIndex-1).getValue0().get(val.trim()); 
+         
+       //  System.out.println("Upisana vrijednost: "+dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1]);
+         
+              } 
+          }
+          
+           data.setFromList(dataList);
+                 data.setSchema(schema);
+                 schema.setSettings(cset);
+
+                 String name=outFolder;
+
+        if(appset.system.equals("windows"))
+            name+="\\JinputInitial"+tid+".arff";
+        else 
+            name+="/JinputInitial"+tid+".arff";
+                 
+        try{
+                 writeArff(name, data);
+            }
+                 catch(Exception e){
+                     e.printStackTrace();
+                 }  
+        return bins;
+    }
     
+  
+  HashMap<Integer,Pair<Double,Double>> initialClusteringGenAttributeKMeansMT(String outFolder, ApplicationSettings appset, int numChangedAttrs, int attributeIndex, int tid, Random r, Mappings map){
+          
+        //determine the correct k
+        //get clusters
+        //assign entities to clusters
+       SimpleKMeans kmeans = new SimpleKMeans();
+       kmeans.setSeed(1);
+      
+         HashMap<Integer,Pair<Double,Double>> bins = new HashMap<>();
+
+          ArrayList<DataTuple> dataList=data.toArrayList();
+          ArrayList<String> values = new ArrayList<>();
+          //create histogram using attribute values
+          //add different values to the nominal type of the target attribute
+          //replace existing attr type with a new one
+          //add corresponding int values to the dataTuples/instances
+         
+         ClusAttrType selectedTargetAttr = schema.getAttrType(attributeIndex);
+         String[] categories=null;
+         
+          if(selectedTargetAttr.getTypeName().contains("Numeric")){
+                //create histogram
+              HashSet<Double> attrV = new HashSet<>();
+                    ArrayList<Double> attrValues = new ArrayList(data.getNbRows());//new ArrayList<>();
+                    
+                    int arind = schema.getAttrType(attributeIndex).getArrayIndex();
+                    
+                    for(int s = 0; s<dataList.size();s++){
+                        int ind = s;
+                        
+                        if(dataList.get(ind).m_Doubles[arind]!=Double.POSITIVE_INFINITY)
+                            attrValues.add(dataList.get(ind).m_Doubles[arind]);
+                        else  continue;
+                    }
+
+                    
+                    // ArrayList<Attribute> attributes = new ArrayList<>();
+                      FastVector attributes = new FastVector();
+                     Attribute numerickiAtribut = new Attribute("value");
+                     attributes.addElement(numerickiAtribut);
+                     
+                     Instances dataset = new Instances("Data", attributes, attrValues.size());
+
+        
+                     for (double val : attrValues) {
+                            Instance inst = new Instance(1);
+                            inst.setDataset(dataset);
+                            inst.setValue(0, val);
+                             dataset.add(inst);
+                      }
+                    
+                  try{   
+                      Random rand = new Random();
+                       int targetIndex = schema.getAttrType(schema.getNbAttributes()-1).getArrayIndex();
+                      ArrayList<TIntHashSet> clusterGroups;
+                      int BestK = -1;
+                      double BestSI = -1;
+                     for(int k=2;k<11;k++){
+                         kmeans = new SimpleKMeans();
+                         kmeans.setSeed(1);
+                         kmeans.setNumClusters(k); 
+                         kmeans.buildClusterer(dataset);
+
+                         int numClusters = kmeans.numberOfClusters();
+                         clusterGroups = new ArrayList<>();
+                         for (int i = 0; i < numClusters; i++) {
+                                clusterGroups.add(new TIntHashSet());
+                             }
+                         
+                         for (int i = 0; i < dataset.numInstances(); i++) {
+                              int clusterID = kmeans.clusterInstance(dataset.instance(i));
+                                  clusterGroups.get(clusterID).add(i);
+                             }
+                         
+                         double MeanSilluhete = 0.0;
+                         
+                          for(int s = 0; s<dataset.numInstances();s++){
+                              int clusterID = kmeans.clusterInstance(dataset.instance(s));
+                              TIntHashSet instancesInCluster = clusterGroups.get(clusterID);
+                              double ai = 0.0;
+                              
+                              Instance a = dataset.instance(s);
+                              double vala = a.value(0);
+                              
+                              TIntIterator it = instancesInCluster.iterator();
+                              
+                              int el = -1;
+                              int count = 0;
+                              while(it.hasNext()){
+                                  el = it.next();
+                                  if(el == s) continue;
+                                  count++;
+                                  Instance i1 = dataset.instance(el);
+                                  double val1 = i1.value(0);
+                                  
+                                  ai+=Math.sqrt((vala - val1)*(vala-val1));
+                              }
+                              
+                              ai/=count;
+                              
+                              double bi = Double.POSITIVE_INFINITY;
+                               double biTmp = 0.0;
+                               TIntHashSet instancesTmp;
+                                TIntIterator itTmp;
+                                int countTmp = 0, elTmp;
+                                
+                              for(int j = 0;j<clusterGroups.size();j++){
+                                  biTmp = 0.0;
+                                  if(j == clusterID) continue;
+
+                                   instancesTmp = clusterGroups.get(j);
+                                   itTmp = instancesTmp.iterator();
+                                  
+                                   countTmp = 0;
+                                                          
+                              while(itTmp.hasNext()){
+                                  elTmp = itTmp.next();
+                                  countTmp++;
+                                  Instance i1 = dataset.instance(elTmp);
+                                  double val1 = i1.value(0);
+                                  
+                                  biTmp+=Math.sqrt((vala - val1)*(vala-val1));
+                              }
+                              
+                              biTmp/=countTmp;
+                              
+                              if(biTmp<bi)
+                                  bi = biTmp;
+                                  
+                              }
+                              
+                              double ti = Math.max(ai, bi);
+                              double si = (bi-ai)/ti;
+                              
+                              MeanSilluhete+=si;
+                              
+                          }
+                          
+                         MeanSilluhete/=dataset.numInstances();
+                        
+                         if(BestK == -1){
+                             BestK = k;
+                             BestSI = MeanSilluhete;
+                         }
+                         else{
+                              if(MeanSilluhete > BestSI){
+                                  BestSI = MeanSilluhete;
+                                  BestK = k;
+                              }
+                         }
+                         
+                     }
+                     
+                     System.out.println("BestK: "+BestK);
+                      
+                     kmeans = new SimpleKMeans();
+                     kmeans.setSeed(1);
+                         kmeans.setNumClusters(BestK); 
+                         kmeans.buildClusterer(dataset);
+                         
+                       System.out.println("number of clusters: "+kmeans.numberOfClusters());
+                         
+                     for(int s=0;s<dataList.size();s++){
+                         if(dataList.get(s).m_Doubles[arind]!=Double.POSITIVE_INFINITY){
+                             int v = dataList.get(s).m_Ints[targetIndex] = rand.nextInt(BestK);
+                         }
+                         else{
+                             int clusterID = kmeans.clusterInstance(dataset.instance(s));
+                             dataList.get(s).m_Ints[targetIndex] = clusterID;
+                         }
+                     }   
+                     
+                     //create bins
+                     int numClusters = kmeans.numberOfClusters();
+                         clusterGroups = new ArrayList<>();
+                         for (int i = 0; i < numClusters; i++) {
+                                clusterGroups.add(new TIntHashSet());
+                             }
+                         
+                         for (int i = 0; i < dataset.numInstances(); i++) {
+                              int clusterID = kmeans.clusterInstance(dataset.instance(i));
+                            //  System.out.println("cluster id: "+clusterID);
+                                  clusterGroups.get(clusterID).add(i);
+                             }
+                         
+                      for(int j = 0;j<clusterGroups.size();j++){
+                                 TIntHashSet instancesTmp = clusterGroups.get(j);
+                                 TIntIterator  itTmp = instancesTmp.iterator();
+                                 double min = Double.POSITIVE_INFINITY, max = Double.NEGATIVE_INFINITY;
+                                  while(itTmp.hasNext()){
+                                  int el = itTmp.next();
+                                  Instance i1 = dataset.instance(el);
+                                  double val1 = i1.value(0);
+                                  if(min>val1) min = val1;
+                                  if(max<val1) max = val1;
+                              }
+                               bins.put(j, new Pair<>(min,max));  
+                      }   
+                      
+                      
+                categories = new String[kmeans.numberOfClusters()];
+               
+               for(int i=0;i<kmeans.numberOfClusters();i++){
+                   values.add("c"+i);
+                   categories[i] =values.get(i);     
+               }
+                         
+                    //assign groups to instances     
+                    //add random category to entities with missing values... 
+                  }
+                  catch(Exception e){}         
+          }   
+            else{
+               categories = new String[map.cattAtt.get(attributeIndex-1).getValue0().keySet().size()];
+               
+               for(int i=0;i<categories.length;i++){
+                   categories[i] = map.cattAtt.get(attributeIndex-1).getValue1().get(i);
+                   bins.put(i, new Pair<>((double)i,Double.NEGATIVE_INFINITY));
+               }
+               
+            }
+
+          ClusAttrType newtype = new NominalAttrType("target",categories);
+          
+          int lastNominal=schema.getNominalAttrUse(ClusAttrType.ATTR_USE_ALL).length; 
+          schema.setAttrType(newtype, schema.getNbAttributes()-1);
+         schema.getAttrType(schema.getNbAttributes()-1).setArrayIndex(lastNominal);
+
+          for(int i=0;i<dataList.size();i++){
+              
+              if(selectedTargetAttr.getTypeName().contains("Numeric")){
+                  
+              }
+              else{
+                String val="";
+
+               int nIndex=schema.getAttrType(attributeIndex).getArrayIndex();
+
+        //System.out.println("nIndex: "+nIndex);
+        NominalAttrType[] nom = schema.getNominalAttrUse(ClusAttrType.ATTR_USE_ALL);
+       // System.out.println("Indeks kategorije za instancu: "+i+" je: "+dataList.get(i).m_Ints[nIndex]);
+       // System.out.println("All indices for instance: "+i);
+       // for(int kk=0;kk<dataList.get(i).m_Ints.length;kk++)
+     //       System.out.print(dataList.get(i).m_Ints[kk]+" ");
+      //  System.out.println();
+      //  System.out.println("Broj nominalnih vrijednosti: "+nom[nIndex].m_Values.length);
+     //   System.out.println("Svi nominalni indeksi: ");
+     //   for(int kk=0;kk<nom[nIndex].m_Values.length;kk++)
+       //     System.out.print(nom[nIndex].m_Values[kk]+" ");
+      //  System.out.println();
+        if(dataList.get(i).m_Ints[nIndex]>=nom[nIndex].m_Values.length)
+           val =  "?";
+         val=nom[nIndex].m_Values[dataList.get(i).m_Ints[nIndex]];  
+      //   System.out.println("val: "+val);
+         if(val.equals("?"))
+             dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1] = 0;
+         else
+            dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1] = map.cattAtt.get(attributeIndex-1).getValue0().get(val.trim()); 
+         
+       //  System.out.println("Upisana vrijednost: "+dataList.get(i).m_Ints[dataList.get(i).m_Ints.length-1]);
+         
+              } 
+          }
+          
+           data.setFromList(dataList);
+                 data.setSchema(schema);
+                 schema.setSettings(cset);
+
+                 String name=outFolder;
+
+        if(appset.system.equals("windows"))
+            name+="\\JinputInitial"+tid+".arff";
+        else 
+            name+="/JinputInitial"+tid+".arff";
+                 
+        try{
+                 writeArff(name, data);
+            }
+                 catch(Exception e){
+                     e.printStackTrace();
+                 }  
+        return bins;
+    }
     
     
     void initialClusteringGen(String outFolder, ApplicationSettings appset, int numChangedAttrs){

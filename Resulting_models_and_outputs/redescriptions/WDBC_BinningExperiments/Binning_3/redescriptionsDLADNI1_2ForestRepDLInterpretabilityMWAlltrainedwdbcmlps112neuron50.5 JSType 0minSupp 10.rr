@@ -1,0 +1,137 @@
+Redescriptions: 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron11 >= 13.801719665527344 <= 23.043563842773438 OR ( trainedwdbcmlps111neuron2 >= 7.0443902015686035 <= 13.990617752075195  )
+W2R: trainedwdbcmlps112neuron5 >= 4.8413262367248535 <= 6.8390302658081055 
+JS: 0.8888888888888888
+p-value :7.213516450832458E-10
+Support intersection: 16
+Support union: 18
+
+Covered examples (intersection): 
+'168' '153' '140' '120' '106' '103' '80' '76' '74' '72' '70' '45' '29' '28' '16' '1' 
+Union elements: 
+'168' '153' '140' '120' '106' '103' '98' '80' '76' '74' '72' '70' '45' '29' '28' '17' '16' '1' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron18 >= 0.0 <= 30.907167434692383 AND trainedwdbcmlps111neuron11 >= 0.0 <= 13.747386932373047  ) 
+W2R: trainedwdbcmlps112neuron9 >= 25.8221435546875 <= 39.70363998413086 AND trainedwdbcmlps112neuron5 >= 4.9487504959106445 <= 6.8390302658081055 
+JS: 0.5454545454545454
+p-value :6.417145301806926E-7
+Support intersection: 12
+Support union: 22
+
+Covered examples (intersection): 
+'153' '140' '120' '106' '74' '72' '70' '45' '29' '28' '16' '1' 
+Union elements: 
+'158' '153' '152' '140' '132' '120' '106' '101' '100' '98' '80' '77' '74' '72' '70' '48' '45' '29' '28' '22' '16' '1' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron11 >= 13.68207836151123 <= 23.043563842773438 OR ( trainedwdbcmlps111neuron7 >= 3.320962905883789 <= 6.1462297439575195 AND trainedwdbcmlps111neuron2 >= 7.299403667449951 <= 8.90849781036377  )
+W2R: trainedwdbcmlps112neuron5 >= 4.8413262367248535 <= 6.8390302658081055 
+JS: 0.9411764705882353
+p-value :3.06054959153812E-10
+Support intersection: 16
+Support union: 17
+
+Covered examples (intersection): 
+'168' '153' '140' '120' '106' '103' '80' '76' '74' '72' '70' '45' '29' '28' '16' '1' 
+Union elements: 
+'168' '153' '140' '120' '106' '103' '98' '80' '76' '74' '72' '70' '45' '29' '28' '16' '1' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron11 >= 10.619210243225098 <= 13.344386100769043 AND trainedwdbcmlps111neuron3 >= 1.9290978908538818 <= 4.17363977432251 
+W2R: trainedwdbcmlps112neuron5 >= 3.2252862453460693 <= 4.574951171875 
+JS: 0.631578947368421
+p-value :1.6634708954743616E-7
+Support intersection: 12
+Support union: 19
+
+Covered examples (intersection): 
+'166' '161' '154' '105' '92' '75' '68' '61' '36' '27' '18' '17' 
+Union elements: 
+'166' '161' '154' '151' '122' '105' '98' '92' '76' '75' '68' '67' '61' '48' '36' '27' '18' '17' '14' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron11 >= 6.652595520019531 <= 9.914586067199707 AND trainedwdbcmlps111neuron29 >= 0.0 <= 1.2312510013580322 
+W2R: trainedwdbcmlps112neuron5 >= 2.0303232669830322 <= 3.060974359512329 
+JS: 0.65625
+p-value :1.8515661881490786E-7
+Support intersection: 21
+Support union: 32
+
+Covered examples (intersection): 
+'169' '163' '159' '131' '128' '125' '115' '111' '102' '99' '95' '91' '81' '52' '51' '46' '30' '12' '4' '3' '2' 
+Union elements: 
+'169' '163' '159' '151' '136' '131' '128' '125' '122' '115' '111' '102' '100' '99' '95' '91' '81' '78' '73' '67' '56' '52' '51' '50' '46' '30' '22' '14' '12' '4' '3' '2' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron11 >= 0.0 <= 6.1335601806640625 AND trainedwdbcmlps111neuron2 >= 0.0 <= 2.781747817993164 
+W2R: trainedwdbcmlps112neuron5 >= 0.0 <= 0.6220445036888123 OR ( NOT ( trainedwdbcmlps112neuron30 >= 0.0 <= 0.0 AND trainedwdbcmlps112neuron4 >= 1.1488006114959717 <= 25.78549575805664  )  )
+JS: 0.7741935483870968
+p-value :1.8161136342564888E-6
+Support intersection: 48
+Support union: 62
+
+Covered examples (intersection): 
+'165' '162' '158' '156' '152' '150' '148' '142' '134' '132' '119' '112' '108' '107' '104' '101' '100' '94' '88' '87' '84' '83' '82' '79' '77' '73' '71' '59' '54' '49' '48' '47' '44' '43' '42' '40' '37' '35' '32' '26' '24' '22' '21' '19' '13' '10' '9' '6' 
+Union elements: 
+'165' '162' '161' '158' '156' '152' '150' '148' '145' '142' '136' '134' '132' '125' '119' '112' '111' '108' '107' '106' '104' '101' '100' '97' '94' '91' '88' '87' '84' '83' '82' '80' '79' '77' '74' '73' '71' '59' '54' '51' '50' '49' '48' '47' '44' '43' '42' '40' '37' '35' '32' '29' '26' '25' '24' '22' '21' '19' '13' '10' '9' '6' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron2 >= 7.0443902015686035 <= 13.990617752075195 OR ( trainedwdbcmlps111neuron11 >= 13.801719665527344 <= 23.043563842773438  )
+W2R: trainedwdbcmlps112neuron5 >= 4.8413262367248535 <= 6.8390302658081055 
+JS: 0.8888888888888888
+p-value :7.213516450832458E-10
+Support intersection: 16
+Support union: 18
+
+Covered examples (intersection): 
+'168' '153' '140' '120' '106' '103' '80' '76' '74' '72' '70' '45' '29' '28' '16' '1' 
+Union elements: 
+'168' '153' '140' '120' '106' '103' '98' '80' '76' '74' '72' '70' '45' '29' '28' '17' '16' '1' 
+
+Rules: 
+
+W1R: NOT ( trainedwdbcmlps111neuron2 >= 0.0 <= 6.885929584503174  ) OR ( trainedwdbcmlps111neuron11 >= 13.801719665527344 <= 23.043563842773438  )
+W2R: trainedwdbcmlps112neuron9 >= 25.8221435546875 <= 39.70363998413086 AND trainedwdbcmlps112neuron5 >= 4.9487504959106445 <= 6.8390302658081055 OR ( trainedwdbcmlps112neuron5 >= 4.8413262367248535 <= 6.8390302658081055  )
+JS: 0.8888888888888888
+p-value :7.213516450832458E-10
+Support intersection: 16
+Support union: 18
+
+Covered examples (intersection): 
+'168' '153' '140' '120' '106' '103' '80' '76' '74' '72' '70' '45' '29' '28' '16' '1' 
+Union elements: 
+'168' '153' '140' '120' '106' '103' '98' '80' '76' '74' '72' '70' '45' '29' '28' '17' '16' '1' 
+
+Rules: 
+
+W1R: trainedwdbcmlps111neuron7 >= 1.3546525239944458 <= 5.0657525062561035 AND trainedwdbcmlps111neuron2 >= 5.3117995262146 <= 6.885929584503174 
+W2R: trainedwdbcmlps112neuron5 >= 3.2252862453460693 <= 4.574951171875 
+JS: 0.5909090909090909
+p-value :5.520905023148615E-7
+Support intersection: 13
+Support union: 22
+
+Covered examples (intersection): 
+'166' '161' '154' '151' '122' '105' '92' '75' '68' '61' '36' '27' '18' 
+Union elements: 
+'166' '161' '154' '151' '122' '105' '102' '98' '92' '78' '75' '68' '67' '61' '56' '48' '36' '27' '18' '17' '14' '4' 
+
+Number of tests: 0
+Found: 9 redescriptions with JS=1.0 and minsupport>10
+
+Results value interval: [0,1]
+Elements coverage: 0.0
+Attributes coverage: 0.0
+Result set score: 0.0
+
+Elapsed time: 0 days, 0 hours,0 minutes, 15 seconds.
