@@ -58,7 +58,7 @@ The studied layers contain 32 neurons each.
 * In addition to obtaining local predictors, understanding neuron and groups of neuron functions, the methdology allows utilising additional sources of information to perform scientific analyses.
 
 ## Binning experiments
-*We compared __WDBC_network_redescripitons_Settings4_, where binning was performed using modified two-bin binning, clusteringMode = 1, (47/64 individual, 47/64 interaction, with accuracy >=0.5) with:
-*__WDBC_network_redescripitons_Settings4_, where we use standard equal width binning with Freedman-Diaconis rule, clusteringMode = 0, (47/64 individual, 47/64 interaction, with accuracy >=0.5)
-*__WDBC_network_redescripitons_Settings4_, where we use equal frequency binning, clusteringMode = 2, (49/64 individual, 48/64 interaction, with accuracy >=0.5)
-*__WDBC_network_redescriptions_Settings4_, where we use k-means based binning, clusteringMode = 3, (50/64 individual, 46/64 interaction, with accuracy >=0.5)
+* We compared __WDBC_network_redescripitons_Settings4_, where binning was performed using modified two-bin binning, clusteringMode = 1, (47/64 individual, 47/64 interaction, with accuracy >=0.5) with:
+* __WDBC_network_redescripitons_Settings4_, where we use standard equal width binning with Freedman-Diaconis rule, clusteringMode = 0, (47/64 individual, 47/64 interaction, with accuracy >=0.5)
+* __WDBC_network_redescripitons_Settings4_, where we use equal frequency binning, clusteringMode = 2, (49/64 individual, 48/64 interaction, with accuracy >=0.5)
+* __WDBC_network_redescriptions_Settings4_, where we use k-means based binning, clusteringMode = 3, (50/64 individual, 46/64 interaction, with accuracy >=0.5)
