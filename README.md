@@ -55,4 +55,10 @@ The studied layers contain 32 neurons each.
 * ExitNeRdoM output provides understandable redescriptions describing neurons of selected layers (penultimate in the toy example) of input networks on the individual and interaction level (it unpacks the boxes and obtains potentially large number of information)
 * The amount of information ExitNeRdoM obtains depends on the input models and on the algorithmic parameters.
 * Algoritmic parameters can cause variations in execution times, since the level of detail about the boxes can be very high (very detailed analyses) or very low but accurate.
-* In addition to obtaining local predictors, understanding neuron and groups of neuron functions, the methdology allows utilising additional sources of information to perform scientific analyses.  
+* In addition to obtaining local predictors, understanding neuron and groups of neuron functions, the methdology allows utilising additional sources of information to perform scientific analyses.
+
+## Binning experiments
+*We compared __WDBC_network_redescripitons_Settings4_, where binning was performed using modified two-bin binning, clusteringMode = 1, (47/64 individual, 47/64 interaction, with accuracy >=0.5) with:
+*__WDBC_network_redescripitons_Settings4_, where we use standard equal width binning with Freedman-Diaconis rule, clusteringMode = 0, (47/64 individual, 47/64 interaction, with accuracy >=0.5)
+*__WDBC_network_redescripitons_Settings4_, where we use equal frequency binning, clusteringMode = 2, (49/64 individual, 48/64 interaction, with accuracy >=0.5)
+*__WDBC_network_redescriptions_Settings4_, where we use k-means based binning, clusteringMode = 3, (50/64 individual, 46/64 interaction, with accuracy >=0.5)
