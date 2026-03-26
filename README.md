@@ -44,7 +44,7 @@ The studied layers contain 32 neurons each.
   * Time taken to obtain __WDBC_network_redescriptions_Settings4_b__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time)
  
 ## Execution times considerations
-* The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 will linearly speed up the computation
+* The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 (or 16) will speed up the computation. Maximal number of threads usable on this toy example is 60.
 * The ExitNeRdoM creates and writes in multiple output files (128 in this example, __2*TotalnumNeurons__ in general)
 * Neural networks are trained on CPU and GPU, where GPUs can run thousands of threads in parallel.
 * The ExitNeRdoM was run on the MLPs activations obtained on the test set (around 30% of data samples, Settings1-Settings3).
