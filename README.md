@@ -25,23 +25,28 @@ The studied layers contain 32 neurons each.
     * One using 1 iteration to compute each redescription set (available at __Resulting_models_and_outputs/redescriptions/WDBC_network_redescriptions_Settings3__)
  
 ## Empirical comparison of network training and analyses
-* MLPs were trained using:
-   *__CPU__: AMD Ryzen 9 5900X 12-Core Processor (12 cores, 24 threads)
-   *__GPU__: RTX 3080 (8704 cores)
-   * Maximally 20 epochs of training can be performed before overfitting occurs. 
-* Execution times:
-   * Time taken to train __mlp-s-111__ (test_acc = 0.953): 1.50 seconds
-   * Time taken to train __mlp-s-112__ (test_acc = 0.953): 1.08 seconds
-   * Toy example networks are small, thus a subset of computational resources were used during training.
-* ExitNeRdoM output was computed using:
-  *__CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
-* Execution times (using 14 threads):
-  * Time taken to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time)      
-  * Time taken to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time)
-  * Time taken to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time)
-  * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 31 seconds (12.02 x mlps train time)
-* Execution times (using 16 threads):
-  * Time taken to obtain __WDBC_network_redescriptions_Settings4_b__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time)
+* MLP training execution times (20 epochs):   
+   * CPU + GPU:
+        * __CPU__: AMD Ryzen 9 5900X 12-Core Processor (12 cores, 24 threads)
+        * __GPU__: RTX 3080 (8704 cores)
+        * Execution times (mlps train time):
+            * Time taken to train __mlp-s-111__ (test_acc = 0.953): 1.50 seconds
+            * Time taken to train __mlp-s-112__ (test_acc = 0.953): 1.08 seconds
+            * Toy example networks are small, thus a subset of computational resources were used during training.
+   * CPU:
+      * __CPU__: Intel Xeon W-1370 (8 cores, 16 threads):
+      * Execution times (mlpsCPU train time):
+         * Time taken to train __mlp-s-111__ : 1.38 seconds
+         * Time taken to train __mlp-s-112__ : 1.16 seconds
+* ExitNeRdoM execution times:
+   * __CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
+   * Execution times (using 14 threads):
+     * Time taken to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time, 286.22 x mlpCPU train time)      
+     * Time taken to obtain __WDBC_network_redescriptions_Settings2__ (48/64 individual, 49/64 interaction, with accuracy >=0.5 ): 1 minute, 10 seconds (27.13 x mlp train time, 27.56 x mlpCPU train time)
+     * Time taken to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time, 14,57 x mlpCPU train time)
+     * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 31 seconds (12.02 x mlps train time, 12.20 x mlpCPU train time)
+   * Execution times (using 16 threads):
+     * Time taken to obtain __WDBC_network_redescriptions_Settings4_b__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time, 9.06 x mlps train time)
  
 ## Execution times considerations
 * The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 (or 16) will speed up the computation. Maximal number of threads usable on this toy example is 60.
