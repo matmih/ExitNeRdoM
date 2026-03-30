@@ -46,7 +46,7 @@ The studied layers contain 32 neurons each.
      * Time taken to obtain __WDBC_network_redescriptions_Settings3__ (48/64 individual, 48/64 interaction, with accuracy >=0.5): 37 seconds (14.34 x mlps train time, 14,57 x mlpCPU train time)
      * Time taken to obtain __WDBC_network_redescriptions_Settings4__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 31 seconds (12.02 x mlps train time, 12.20 x mlpCPU train time)
    * Execution times (using 16 threads):
-     * Time taken to obtain __WDBC_network_redescriptions_Settings4_b__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time, 9.06 x mlps train time)
+     * Time taken to obtain __WDBC_network_redescriptions_Settings4_b__ (47/64 individual, 47/64 interaction, with accuracy >=0.5): 23 seconds (8.91 x mlps train time, 9.06 x mlpCPU train time)
  
 ## Execution times considerations
 * The ExitNeRdoM is currently run only on CPU threads, increasing the number of threads from 14 (or 16) will speed up the computation. Maximal number of threads usable on this toy example is 60.
