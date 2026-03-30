@@ -38,7 +38,7 @@ The studied layers contain 32 neurons each.
       * Execution times (mlpsCPU train time):
          * Time taken to train __mlp-s-111__ : 1.38 seconds
          * Time taken to train __mlp-s-112__ : 1.16 seconds
-* ExitNeRdoM execution times:
+* ExitNeRdoM execution times (loading, computation, storing results):
    * __CPU__: Intel Xeon W-1370 (8 cores, 16 threads)
    * Execution times (using 14 threads):
      * Time taken to obtain __WDBC_network_redescriptions_Settings1__ (48/64 individual, 51/64 interaction, with accuracy >=0.5): 12 minutes, 7 seconds (281.78 x mlp train time, 286.22 x mlpCPU train time)      
