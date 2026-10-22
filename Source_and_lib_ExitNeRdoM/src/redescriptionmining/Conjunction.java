@@ -9,6 +9,7 @@ import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.TIntHashSet;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -20,6 +21,7 @@ public class Conjunction {
     TIntObjectHashMap<ArrayList<Double>> Rule=null;
     boolean isNegated=false;
     TIntHashSet elementsTest = null;
+    boolean categoricalDisjunction = false;
     
     Conjunction(){
         elements=new TIntHashSet();
@@ -41,6 +43,7 @@ public class Conjunction {
        attributes=new TIntHashSet(con.attributes);
        Rule=new TIntObjectHashMap(con.Rule);
        isNegated=con.isNegated;
+       categoricalDisjunction = con.categoricalDisjunction;
     }
     
     Conjunction(String _rule, DataSetCreator dat, Mappings map){
@@ -50,7 +53,7 @@ public class Conjunction {
         String rs[]=_rule.split(" AND ");
          
         for(int i=0;i<rs.length;i++){
-                if(rs[i].contains(">")){
+                 if(rs[i].contains(">")){
                     String t[]=rs[i].split(" > ");
 
                      if(!attributes.contains(map.attId.get(t[0]))){
@@ -69,6 +72,82 @@ public class Conjunction {
                 else if(rs[i].contains("=") && !rs[i].contains("<")){
                       String t[]=rs[i].split(" = ");
                        if(!attributes.contains(map.attId.get(t[0]))){
+                           attributes.add(map.attId.get(t[0]));
+                      }
+                }
+                else if(rs[i].contains(" in ")){
+                    categoricalDisjunction = true;
+                    String t[]=rs[i].split(" in ");
+                    if(!attributes.contains(map.attId.get(t[0]))){
+                           attributes.add(map.attId.get(t[0]));
+                      }
+                }
+            }
+        
+        if(attributes.size()==0){
+            System.out.println("Something is wrong in the Conjunction from Rule computation!");
+            System.out.println("Rule :"+_rule);
+        }
+    }
+    
+     Conjunction(String _rule, DataSetCreator dat, Mappings map, double load){
+        elements=new TIntHashSet(dat.numExamples);
+        attributes=new TIntHashSet(dat.schema.getNbAttributes());
+        Rule=new TIntObjectHashMap();
+        String rs[]=_rule.split(" AND ");
+         
+        for(int i=0;i<rs.length;i++){
+                if(rs[i].contains(">=")){
+                    String t[]=rs[i].split(" >= ");
+                    t[0] = t[0].trim();
+                    t[0] = t[0].replace("W1R: ","");
+                    t[0] = t[0].replace("W2R: ", "");
+
+                     if(!attributes.contains(map.attId.get(t[0]))){
+                       // t[1]=t[1].replaceAll(",", ".");
+                        attributes.add(map.attId.get(t[0]));
+                        
+                        ArrayList<Double> attVal=new ArrayList<>(Collections.nCopies(4, 0.0));//leftRule.get(att);
+
+                        String bounds[] = t[1].split(" <= ");
+                        double min = Double.parseDouble(bounds[0].trim());
+                        double max = Double.parseDouble(bounds[1].trim());
+                       // System.out.println("min/max"+" "+min+" "+max);
+                        
+                      attVal.set(0, 1.0);
+                      attVal.set(2, 1.0);
+                      attVal.set(1, min);
+                      attVal.set(3, max);
+                      Rule.put(map.attId.get(t[0]), attVal);
+                        
+                    }
+                }
+                else if(rs[i].contains(">")){
+                    String t[]=rs[i].split(" > ");
+
+                     if(!attributes.contains(map.attId.get(t[0]))){
+                        t[1]=t[1].replaceAll(",", ".");
+                        attributes.add(map.attId.get(t[0]));
+                    }
+                }
+                else if(rs[i].contains("<=")){
+                     String t[]=rs[i].split(" <= ");
+                     if(!attributes.contains(map.attId.get(t[0]))){
+                        t[1]=t[1].replaceAll(",", ".");
+
+                        attributes.add(map.attId.get(t[0]));
+                    }
+                }
+                else if(rs[i].contains("=") && !rs[i].contains("<")){
+                      String t[]=rs[i].split(" = ");
+                       if(!attributes.contains(map.attId.get(t[0]))){
+                           attributes.add(map.attId.get(t[0]));
+                      }
+                }
+                else if(rs[i].contains(" in ")){
+                    categoricalDisjunction = true;
+                    String t[]=rs[i].split(" in ");
+                    if(!attributes.contains(map.attId.get(t[0]))){
                            attributes.add(map.attId.get(t[0]));
                       }
                 }
@@ -91,8 +170,6 @@ public class Conjunction {
                 if(rs[i].contains(">=")){
                     String t[]=rs[i].split(" >= ");
 //System.out.println("t[0] "+t[0]);
-                 if(map.attId==null){System.out.println("map.attId is null!");}
-                 else if(map.attId.get(t[0]) == null){System.out.println("t err: "+t[0]);}
                      if(!attributes.contains(map.attId.get(t[0]))){
                        // t[1]=t[1].replaceAll(",", ".");
                         attributes.add(map.attId.get(t[0]));
@@ -108,8 +185,6 @@ public class Conjunction {
                 }
                 else if(rs[i].contains("=") && !rs[i].contains("<")){
                       String t[]=rs[i].split(" = ");
-                      if(!map.attId.containsKey(t[0]))
-                          System.out.println(t[0]);
                        if(!attributes.contains(map.attId.get(t[0]))){
                            attributes.add(map.attId.get(t[0]));
                       }
@@ -134,6 +209,7 @@ public class Conjunction {
                              ArrayList<Double> attrVal=Rule.get(attr);
                            if(!map.cattAtt.containsKey(attr)){
                                  double val=dat.getValue(attr, el);
+                               // System.out.println(attrVal.get(1)+" "+attrVal.get(3));
                                 if(val>=attrVal.get(1) && val<=attrVal.get(3))
                                         continue;
                  else{
@@ -152,7 +228,6 @@ public class Conjunction {
                    }
                }
               }
-                        
                         if(contained==1)
                             tmp.add(el);
          }

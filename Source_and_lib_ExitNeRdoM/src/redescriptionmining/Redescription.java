@@ -99,30 +99,6 @@ public class Redescription implements Comparable<Redescription>{
         return tmp;
     }
     
-      Redescription deepCopy1(Redescription r){
-        Redescription tmp = new Redescription(r);
-        
-        tmp.JS = r.JS;
-        tmp.pVal = r.pVal;
-        tmp.elements = new TIntHashSet();
-        tmp.elements.addAll(r.elements);
-        tmp.elementsUnion = new TIntHashSet();
-        tmp.elementsUnion.addAll(r.elementsUnion);
-        
-     
-         tmp.viewElementsLists=new ArrayList<>(r.viewElementsLists.size());
-         Conjunction c;
-        for(int i=0;i<r.viewElementsLists.size();i++){
-            tmp.viewElementsLists.add(new ArrayList<Conjunction>(5));
-            for(int j=0;j<r.viewElementsLists.get(i).size();j++){
-                c = new Conjunction(r.viewElementsLists.get(i).get(j));
-               tmp.viewElementsLists.get(i).add(c);
-            }
-        }
-        
-        return tmp;
-    }
-    
     Redescription(Redescription r, int w1, int w2, int numViews){
          ruleStrings=new ArrayList<>(numViews);
          
@@ -167,6 +143,43 @@ public class Redescription implements Comparable<Redescription>{
         }
         supportsSides=new ArrayList<Integer>();
     }
+      
+      
+      Redescription(String LR, String RR, double sim, Mappings map, DataSetCreator dat, int operator, int view1, int view2, double load){
+         ruleStrings=new ArrayList<>(2*dat.W2indexs.size());
+         for(int i=0;i<dat.W2indexs.size()+1;i++)
+             ruleStrings.add("");
+       // ruleStrings.add(LR); ruleStrings.add(RR);
+         ruleStrings.set(view1, LR);
+         ruleStrings.set(view2, RR);
+         
+        elements=new TIntHashSet(dat.numExamples);
+        viewElementsLists=new ArrayList<>(2*dat.W2indexs.size());
+        for(int i=0;i<dat.W2indexs.size()+1;i++)
+            viewElementsLists.add(new ArrayList<Conjunction>(5));
+        elementsUnion=new TIntHashSet(dat.numExamples);
+        JS=sim;
+        
+        Conjunction cleft=new Conjunction(LR,dat,map,1.0);
+        Conjunction cright=new Conjunction(RR,dat,map,1.0);
+        
+        if(operator==0){  
+            viewElementsLists.get(view1).add(cleft);
+            viewElementsLists.get(view2).add(cright);
+        }
+        else if(operator==1){
+           cright.isNegated=true; 
+           viewElementsLists.get(view1).add(cleft);
+           viewElementsLists.get(view2).add(cright);
+        }
+        else{
+            cleft.isNegated=true;
+            viewElementsLists.get(view1).add(cleft);
+            viewElementsLists.get(view2).add(cright);
+        }
+        supportsSides=new ArrayList<Integer>();
+    }
+     
      
     
      Redescription(String LR, String RR, double sim, Mappings map, DataSetCreator dat, int view1, int view2){
@@ -361,372 +374,6 @@ public class Redescription implements Comparable<Redescription>{
         
         return nw;
     }
-    
-    double computeHomogeneity(TargetLabels l, Mappings fid){
-        double homogeneity = 1.0;
-        
-        HashMap<String,Integer> labelIndex = new HashMap<>();
-        int count = 0;
-        
-        for(String s:l.allLabels){
-            labelIndex.put(s, count++);
-        }
-        
-        ArrayList<Integer> counts = new ArrayList<>(l.allLabels.size());
-        for(int i=0;i<l.allLabels.size();i++) counts.add(0);
-       TIntIterator it = elements.iterator();
-       
-       while(it.hasNext()){
-           String el = fid.idExample.get(it.next()).replaceAll("'", "");
-           String ll = l.entityLabel.get(el);
-           counts.set(labelIndex.get(ll),counts.get(labelIndex.get(ll))+1);
-       }
-        
-       double sum = 0.0;
-       for(int i=0;i<counts.size();i++){
-           double prob = (double)counts.get(i)/elements.size();
-           if(prob == 0) continue;
-           sum+=prob*(Math.log10(prob)/Math.log10(2));
-       }
-        homogeneity = -sum;
-        return homogeneity;
-    }
-    
-    
-     void computeStatisticsRE(ArrayList<DataSetCreator> dats, ArrayList<Mappings> mappings){
-        //J, p-val, support
-         ArrayList<TIntHashSet> Supports=new ArrayList<>();// TIntHashSet(dataset.numExamples);
-     
-         //fill structures from queries
-         //create attribute, numerical bound mapping and attribute category mapping
-         
-         HashMap<Integer,HashMap<Integer,HashMap<String,ArrayList<Double>>>> numericalAttributes = new HashMap<>();
-         HashMap<Integer,HashMap<Integer,HashMap<String,String>>> categoricalAttributes = new HashMap<>();
-         HashMap<Integer,HashSet<Integer>> negatedClauses = new HashMap<>();
-         
-         this.viewElementsLists = new ArrayList<>();
-        
-         for(int i=0;i<this.ruleStrings.size();i++){
-            // System.out.println("Mappings size: "+mappings.get(i).attId.keySet().size());
-             this.viewElementsLists.add(new ArrayList<Conjunction>());
-             if(this.ruleStrings.get(i) == null)
-                 continue;
-             
-             //System.out.println(this.ruleStrings.get(i));
-             String elConj[] = this.ruleStrings.get(i).replaceAll("\\)OR", "OR").split(" OR ");
-             
-             for(int j=0;j<elConj.length;j++){
-                 //System.out.println("El conj: "+elConj[j]);
-                 if(elConj[j].contains("NOT ")){
-                     int negated = 1;
-                     if(!negatedClauses.containsKey(i))
-                         negatedClauses.put(i, new HashSet<Integer>());
-                     negatedClauses.get(i).add(j);
-                     String rule = elConj[j].trim().replace("NOT ", "");
-                     rule = rule.replaceAll("\\(", "");
-                     rule = rule.replaceAll("\\)", "").trim();
-                     String attrs[] = rule.split(" AND ");
-                     
-                     for(int zz = 0; zz<attrs.length;zz++){
-                         if(attrs[zz].contains(">=")){
-                            String t[]=attrs[zz].split(" >= ");
-                            
-                            if(!numericalAttributes.containsKey(i))
-                                    numericalAttributes.put(i, new HashMap<Integer,HashMap<String,ArrayList<Double>>>());
-                            
-                            if(!numericalAttributes.get(i).containsKey(j))
-                                numericalAttributes.get(i).put(j, new HashMap<String,ArrayList<Double>>());
-                    
-                            String at = t[0].trim();
-                            ArrayList<Double> bounds = new ArrayList<>();
-                            
-                            String t1[] = t[1].split(" <= ");
-                            bounds.add(Double.parseDouble(t1[0]));
-                            bounds.add(Double.parseDouble(t1[1]));
-                            
-                            numericalAttributes.get(i).get(j).put(at,bounds);
-                            
-                     }               
-                else if(attrs[zz].contains("=") && !attrs[zz].contains("<")){
-                      String t[]=attrs[zz].split(" = ");
-                      String at = t[0].trim();
-                      String cat = t[1].trim();
-                      
-                      if(!categoricalAttributes.containsKey(i))
-                                    categoricalAttributes.put(i, new HashMap<Integer,HashMap<String,String>>());
-                            
-                      if(!categoricalAttributes.get(i).containsKey(j))
-                                categoricalAttributes.get(i).put(j, new HashMap<String,String>());
-                      categoricalAttributes.get(i).get(j).put(at, cat);
-                    
-                      
-                }
-                     }
-                     
-                     Conjunction c = new Conjunction(rule,dats.get(i),mappings.get(i),0);
-                     c.isNegated = true;
-                     this.viewElementsLists.get(i).add(c);
-                 }
-                 else{
-                     String rule = elConj[j].trim();
-                      rule = rule.replaceAll("\\(", "");
-                     rule = rule.replaceAll("\\)", "").trim();
-                      Conjunction c = new Conjunction(rule,dats.get(i),mappings.get(i),0);
-                      this.viewElementsLists.get(i).add(c);
-                      
-                      
-                     String attrs[] = rule.split(" AND ");
-                     
-                     for(int zz = 0; zz<attrs.length;zz++){
-                         if(attrs[zz].contains(">=")){
-                            String t[]=attrs[zz].split(" >= ");
-                            //System.out.println("attrs: "+attrs[zz].trim());
-                            if(!numericalAttributes.containsKey(i))
-                                    numericalAttributes.put(i, new HashMap<Integer,HashMap<String,ArrayList<Double>>>());
-                            
-                            if(!numericalAttributes.get(i).containsKey(j))
-                                numericalAttributes.get(i).put(j, new HashMap<String,ArrayList<Double>>());
-                    
-                            String at = t[0].trim();
-                            ArrayList<Double> bounds = new ArrayList<>();
-                            
-                            String t1[] = t[1].split(" <= ");
-                            bounds.add(Double.parseDouble(t1[0]));
-                            bounds.add(Double.parseDouble(t1[1]));
-                            
-                            numericalAttributes.get(i).get(j).put(at,bounds);
-                            
-                     }               
-                else if(attrs[zz].contains("=") && !attrs[zz].contains("<")){
-                      String t[]=attrs[zz].split(" = ");
-                      String at = t[0].trim();
-                      String cat = t[1].trim();
-                      
-                      if(!categoricalAttributes.containsKey(i))
-                                    categoricalAttributes.put(i, new HashMap<Integer,HashMap<String,String>>());
-                            
-                      if(!categoricalAttributes.get(i).containsKey(j))
-                                categoricalAttributes.get(i).put(j, new HashMap<String,String>());
-                      categoricalAttributes.get(i).get(j).put(at, cat);
-                    
-                      
-                } 
-                     }
-                 }
-             }           
-         }
-         
-        for(int k=0;k<viewElementsLists.size();k++)
-            Supports.add(new TIntHashSet(dats.get(0).numExamples));
-        
-     for(int k=0;k<viewElementsLists.size();k++){
-         
-
-       for(int c=0;c<viewElementsLists.get(k).size();c++){  
-           Conjunction conj=viewElementsLists.get(k).get(c);
-           
-           int negated = 0;
-           
-          // if(negatedClauses.get(k).contains(c))
-           //    negated = 1;
-           
-         for(int i=0;i<dats.get(0).numExamples;i++){
-            // TIntIterator itL=conj.Rule.keySet().iterator();
-             int contained=1;
-            
-        if(conj.isNegated==false){  
-            
-            if(numericalAttributes.containsKey(k)){
-                if(numericalAttributes.get(k).containsKey(c)){
-            
-            HashMap<String, ArrayList<Double>> nats = numericalAttributes.get(k).get(c);
-            Iterator<String> itL = nats.keySet().iterator();
-            
-             while(itL.hasNext()){
-                 String attr=itL.next();
-                 int atCode = mappings.get(k).attId.get(attr);
-                 
-                 ArrayList<Double> attrVal=nats.get(attr);
-                 /*System.out.println("Attribute: "+map.idAtt.get(attr));
-                 System.out.println("view: "+k);
-                 System.out.println("conjunction: "+c);
-                 System.out.println("elements size: "+conj.elements.size());
-                 System.out.println("rule attr size: "+conj.Rule.keySet().size());
-                 System.out.println("attrs size: "+conj.attributes.size());*/
-                 
-               //if(!mappings.get(k).cattAtt.containsKey(attr)){
-                   double val=dats.get(k).getValue(atCode, i);
-                 if(val>=attrVal.get(0) && val<=attrVal.get(1))
-                        continue;
-                 else{
-                    contained=0;
-                    break;
-                 }
-             //  }
-              /* else{
-                   String cat=mappings.get(k).cattAtt.get(attr).getValue1().get((int)(double)attrVal.get(0));
-                   String realCat=dats.get(k).getValueCategorical(attr, i);
-                   if(cat.contentEquals(realCat))
-                       continue;
-                   else{
-                       contained=0;
-                       break;
-                   }
-               }*/
-             }
-            }
-          }
-            
-             if(contained!=0){
-              
-              if(categoricalAttributes.containsKey(k)){   
-                 if(categoricalAttributes.get(k).containsKey(c)){
-                 
-             HashMap<String, String> cats = categoricalAttributes.get(k).get(c);
-             Iterator<String> itL = cats.keySet().iterator();
-            
-             while(itL.hasNext()){
-                 String attr=itL.next();
-                 int atCode = mappings.get(k).attId.get(attr);
-                 String cat= cats.get(attr);
-                   String realCat=dats.get(k).getValueCategorical(atCode, i);
-                   if(cat.contentEquals(realCat))
-                       continue;
-                   else{
-                       contained=0;
-                       break;
-                   }
-             }
-            }
-          }
-           }
-             
-        }
-             else{
-                 contained=0;
-              
-            if(numericalAttributes.containsKey(k)){
-                if(numericalAttributes.get(k).containsKey(c)){     
-                 HashMap<String, ArrayList<Double>> nats = numericalAttributes.get(k).get(c);
-            Iterator<String> itL = nats.keySet().iterator();
-            
-             while(itL.hasNext()){
-                 String attr=itL.next();
-                 int atCode = mappings.get(k).attId.get(attr);
-                 
-                 ArrayList<Double> attrVal=nats.get(attr);
-
-                   double val=dats.get(k).getValue(atCode, i);
-                 if(val<attrVal.get(0) || (val>attrVal.get(1) && val!=Double.POSITIVE_INFINITY)){
-                        contained = 1;
-                        break;
-                 }
-                 else{
-                    continue;
-                 }
-             }
-            }
-           }
-
-              if(contained!=1){
-                  
-                   if(categoricalAttributes.containsKey(k)){   
-                 if(categoricalAttributes.get(k).containsKey(c)){
-                     
-                 
-             HashMap<String, String> cats = categoricalAttributes.get(k).get(c);
-             Iterator<String> itL = cats.keySet().iterator();
-            
-             while(itL.hasNext()){
-                 String attr=itL.next();
-                 int atCode = mappings.get(k).attId.get(attr);
-                 String cat = cats.get(attr);
-                   String realCat=dats.get(k).getValueCategorical(atCode, i);
-                   if(!cat.contentEquals(realCat) && !realCat.equals("?")){
-                       contained = 1;
-                       break;
-                   }
-                   else{
-                       continue;
-                   }
-             }
-            }
-          }
-           }              
-             }
-
-             if(contained==0)
-                 continue;
-             else{
-                 //lSupport.add(i);
-                 Supports.get(k).add(i);
-             }
-         }
-       }
-     }
-     
-     HashSet<Integer> intersection = new HashSet<>();
-     HashSet<Integer> union = new HashSet<>();
-     
-     TIntHashSet start = null;
-     
-     int startInd = -1;
-      start = Supports.get(0);
-
-      
-      TIntIterator it = start.iterator();
-      
-      while(it.hasNext()){
-          int el = it.next();
-          int contained = 1;
-           for(int k=1;k<viewElementsLists.size();k++){
-                if(!Supports.get(k).contains(el)){
-                    contained = 0;
-                    break;
-                }
-                
-           }
-           
-           if(contained == 1)
-               intersection.add(el);          
-      }
-      
-      for(int k=0;k<viewElementsLists.size();k++){
-                
-            it = Supports.get(k).iterator();
-            
-            while(it.hasNext()){
-                union.add(it.next());
-            }
-            
-      }
-      
-      /*System.out.println("intersection size: "+intersection.size());
-      System.out.println("union size: "+union.size());
-      System.out.println("Missing: "+missingView.size());
-      System.out.println("Num views: "+viewElementsLists.size());*/
-      
-      this.elements = new TIntHashSet();
-      this.elementsUnion = new TIntHashSet();
-      
-      this.JS = (double)intersection.size()/(double)union.size();
-      this.elements.addAll(intersection);
-      this.elementsUnion.addAll(union);
-      
-       double elemSize=1.0, numExamples=1.0;
-            
-            for(int k=0;k<this.viewElementsLists.size();k++){
-                    elemSize*=Supports.get(k).size();
-                    numExamples*=dats.get(0).numExamples;
-                
-            }
-            
-            double prob=elemSize/numExamples;
-            BinomialDistribution dist=new BinomialDistribution(dats.get(0).numExamples,prob);
-            this.pVal=1.0-dist.cumulativeProbability(this.elements.size());
-     
-    }
-    
     
     void computeStatistics(ArrayList<DataSetCreator> dats, ArrayList<Mappings> mappings){
         //J, p-val, support
@@ -1076,84 +723,6 @@ public class Redescription implements Comparable<Redescription>{
             this.pVal=1.0-dist.cumulativeProbability(this.elements.size());
      
     }
-    
-       public double computePrecision(TargetLabels labels, HashMap<String,Integer> labelIndex, Mappings map){
-        double precision = 0.0;
-        ArrayList<Integer> targetCounts = new ArrayList();
-    
-        
-        for(int i=0;i<labels.allLabels.size();i++)
-            targetCounts.add(0);
-        
-        //first compute the majority class to determine the rule class
-        TIntIterator it = elements.iterator();
-        while(it.hasNext()){
-            int el = it.next();
-            String elName = map.idExample.get(el);
-            int val = targetCounts.get(labelIndex.get(labels.entityLabel.get(elName)));
-            val++;
-            targetCounts.set(labelIndex.get(labels.entityLabel.get(elName)), val);
-        }
-        
-        int maxInd = 0,max = -1;
-        
-        for(int i=0;i<targetCounts.size();i++)
-            if(targetCounts.get(i)>max){
-                max = targetCounts.get(i);
-                maxInd = i;
-            }
-        
-        double tp = 0.0,fp=0.0;
-        
-         it = elements.iterator();
-        while(it.hasNext()){
-            int el = it.next();
-            String elName = map.idExample.get(el);
-
-            int ind = labelIndex.get(labels.entityLabel.get(elName));
-            if(ind == maxInd)
-                tp = tp+1;
-            else fp = fp+1;
-        }
-        
-        //compute precision
-        
-        precision = tp/(tp+fp);
-        
-        return precision;
-    }
-    
-       public int majorityClassIndex(TargetLabels labels, HashMap<String,Integer> labelIndex, Mappings map){
-           ArrayList<Integer> targetCounts = new ArrayList();
-    
-        
-        for(int i=0;i<labels.allLabels.size();i++)
-            targetCounts.add(0);
-        
-        //first compute the majority class to determine the rule class
-        TIntIterator it = elements.iterator();
-        while(it.hasNext()){
-            int el = it.next();
-            String elName = map.idExample.get(el);
-            /*System.out.println("elName: "+elName);
-            System.out.println("label: "+labels.entityLabel.get(elName));
-            System.out.println("label index: "+labelIndex.get(labels.entityLabel.get(elName)));
-            System.out.println("targetCounts: "+targetCounts.get(labelIndex.get(labels.entityLabel.get(elName))));*/
-            int val = targetCounts.get(labelIndex.get(labels.entityLabel.get(elName)));
-            val++;
-            targetCounts.set(labelIndex.get(labels.entityLabel.get(elName)), val);
-        }
-        
-        int maxInd = 0,max = -1;
-        
-        for(int i=0;i<targetCounts.size();i++)
-            if(targetCounts.get(i)>max){
-                max = targetCounts.get(i);
-                maxInd = i;
-            }
-        
-        return maxInd;
-       }
     
     Redescription computeStatisticsAndReturn(Redescription R2, int type, ArrayList<DataSetCreator> dats, ArrayList<Mappings> mappings, double minJ, double minSupp){
        //type: 0, only direct joing possible (take all from the first red, add complement from the second)
@@ -2039,10 +1608,7 @@ public class Redescription implements Comparable<Redescription>{
          ruleStrings=new ArrayList<>();
          for(int i=0;i<R.ruleStrings.size();i++)
              ruleStrings.add(R.ruleStrings.get(i));
-         if(ruleStrings.size()<view)
-             for(int i=0;i<=view;i++)
-                 ruleStrings.add("");
-        ruleStrings.set(view,RR);
+        ruleStrings.add(RR);
         elements=new TIntHashSet(dat.numExamples);
         viewElementsLists=new ArrayList<>();
         for(int i=0;i<dat.W2indexs.size()+1;i++)
@@ -2524,8 +2090,19 @@ public class Redescription implements Comparable<Redescription>{
                 }
                }
              else{
+                if(!conj.categoricalDisjunction){
                 RSTemp+="= ";  
                 RSTemp+=map.cattAtt.get(at).getValue1().get((int)(double)val.get(0))+" ";
+                 }
+                 else{
+                     RSTemp+="in {";
+                     for(int zz=0;zz<val.size();zz++){
+                         if(zz<val.size()-1)
+                         RSTemp+=map.cattAtt.get(at).getValue1().get((int)(double)val.get(zz))+",";
+                         else RSTemp+=map.cattAtt.get(at).getValue1().get((int)(double)val.get(zz));
+                     }
+                     RSTemp+="} ";
+                 }
              }
              
              if(it.hasNext())
@@ -4382,6 +3959,7 @@ public class Redescription implements Comparable<Redescription>{
              conj.Rule.put(att, attVal);
          }
          else{
+             if(!conj.categoricalDisjunction){
            TIntIterator  it=conj.elements.iterator();
              //System.out.println("Categorical attribute");
             // System.out.println("Num elements on the left side: "+leftRuleElements.size());
@@ -4398,6 +3976,29 @@ public class Redescription implements Comparable<Redescription>{
                 conj.Rule.put(att, attVal);
                 break;
              }
+             }
+             else{
+                  TIntIterator  it=conj.elements.iterator();
+                HashSet<String> categories = new HashSet<>();
+             while(it.hasNext()){
+                 //System.out.println("Iterating through elements");
+              int s=it.next();
+                 int ik=s;
+                 String val=dataset.getValueCategorical(att, ik);
+                 categories.add(val);
+              /*  // System.out.println("Value: "+val);
+                ArrayList<Double> attVal=new ArrayList<>();
+                attVal.add((double)map.cattAtt.get(att).getValue0().get(val));
+               // System.out.println("Attr value..");
+               // System.out.println(attVal.get(0));
+                conj.Rule.put(att, attVal);
+                break;*/
+             }
+             ArrayList<Double> attVal=new ArrayList<>();
+             for(String cat:categories)
+             attVal.add((double)map.cattAtt.get(att).getValue0().get(cat));
+             conj.Rule.put(att, attVal);
+             }
          }
        }
     }   
@@ -4413,7 +4014,7 @@ public class Redescription implements Comparable<Redescription>{
           if(viewElementsLists.get(i).size()>0)
               fullV++;
       System.out.println("Number of viewes used: "+fullV);
-      
+     
       /*this.closeInterval(dataset, map);
       this.createRuleString(map);
       for(int i=0;i<this.ruleStrings.size();i++)
@@ -4454,13 +4055,36 @@ public class Redescription implements Comparable<Redescription>{
                  }
                }
                else{
-                   String cat=map.cattAtt.get(attr).getValue1().get((int)(double)attrVal.get(0));
-                   String realCat=dataset.getValueCategorical(attr, i);
-                   if(cat.contentEquals(realCat))
+                   if(!conj.categoricalDisjunction){
+                   String cat=map.cattAtt.get(attr).getValue1().get((int)(double)attrVal.get(0)).trim();
+                   String realCat=dataset.getValueCategorical(attr, i).trim();
+                   /*System.out.println("case !CD cat "+" realCat:");
+                   System.out.println(cat+" "+realCat);
+                   System.out.println("Attribute: "+map.idAtt.get(attr));
+                   System.out.println(this.ruleStrings.get(0)+"\n"+this.ruleStrings.get(1));*/
+                   if(cat.contentEquals(realCat)){
                        continue;
+                   }
                    else{
                        contained=0;
                        break;
+                   }
+                   }
+                   else{
+                       String realCat=dataset.getValueCategorical(attr, i).trim();
+                       int found = 0;
+                       for(int zz=0;zz<attrVal.size();zz++){
+                            String cat=map.cattAtt.get(attr).getValue1().get((int)(double)attrVal.get(zz)).trim();
+                            if(cat.contentEquals(realCat)){
+                                found = 1;
+                                break;
+                            }
+                       }
+                       if(found == 1) continue;
+                       else{
+                           contained = 0;
+                           break;
+                       }
                    }
                }
              }
@@ -4521,10 +4145,22 @@ public class Redescription implements Comparable<Redescription>{
          
          if(elements.size()!=contElem.size()){
              this.createRuleString(map);
-            for(int k=0;k<viewElementsLists.size();k++)
+            for(int k=0;k<viewElementsLists.size();k++){
+                System.out.println("Categorical disjunctions: ");
+                for(int zz=0;zz<viewElementsLists.get(k).size();zz++)
+                System.out.println(viewElementsLists.get(k).get(zz).categoricalDisjunction);
                 System.out.println("Rule W"+(k+1)+" "+ruleStrings.get(k));
+            }
              System.out.println("elements size in validation: "+elements.size());
              System.out.println("control elements size in validation: "+contElem.size());
+             System.out.println("Reds acc: "+this.JS);
+             System.out.println("Control support sizes: ");
+             for(int zz=0;zz<Supports.size();zz++)
+             System.out.println(Supports.get(zz).size()+" ");
+             
+             System.out.println("Computed clause support sizes: ");
+             for(int zz=0;zz<sideElems.size();zz++)
+             System.out.println(sideElems.get(zz).size()+" ");
              
              if(elements.size()>contElem.size()){
                  for(int i:elements.toArray())
@@ -4695,9 +4331,10 @@ public class Redescription implements Comparable<Redescription>{
           
       }
       
-      
       this.elementsUnionValidation=redUnion;
+     // System.out.println("Validation sets size: "+this.elementsValidation.size()+" "+this.elementsUnionValidation.size());
       this.JSAll=(double)this.elementsValidation.size()/this.elementsUnionValidation.size();
+      if(this.elementsUnionValidation.size() == 0) this.JSAll = 0.0;
       
      // this.JSAll=this.computePVal(dataset, map);
       
@@ -5186,6 +4823,8 @@ public class Redescription implements Comparable<Redescription>{
       
       for(int k=0;k<viewElementsLists.size();k++){  
         for(int i=0;i<viewElementsLists.get(k).size();i++){
+             if(viewElementsLists.get(k).get(i).categoricalDisjunction)
+                continue;
             if(viewElementsLists.get(k).get(i).attributes.size()==0)
                 System.out.println("Empty conjunction in minimizeOptimal");
             if(viewElementsLists.get(k).get(i).isNegated==false)
